@@ -1,5 +1,7 @@
 #include <SPI.h>
 #include <MFRC522.h>
+#include <ESP32Servo.h>
+
 
 // pines
 const int pinreed = 4;
@@ -19,6 +21,7 @@ bool auth = false;
 bool puerta = false;
 bool armado = false;
 const int Tgracia = 20;
+Servo servoMotor;
 
 // UID válido
 byte uidValido[4] = {0x33, 0x79, 0x9F, 0x36};
@@ -259,6 +262,9 @@ void alarma() {
 
 // --- SETUP Y LOOP ---
 void setup() {
+    
+    servoMotor.attach(32);
+
     pinMode(pinreed, INPUT_PULLUP);
     pinMode(pinled, OUTPUT);
     pinMode(pinbuzzer, OUTPUT);
@@ -282,6 +288,7 @@ void setup() {
 
 void loop() {
     String cmd = nexLeer();
+    servoMotor.write(0);
 
     if (cmd.indexOf("LOCK") >= 0 && armado == false) {
         Serial.println("[LOOP] Comando LOCK recibido");
@@ -299,8 +306,10 @@ void loop() {
             Serial.println("[LOOP] Puerta abierta! Entrando a gracia");
             auth = false;
             gracia();
+            servoMotor.write(90);//puerta cerrada
             if (armado == true) {
                 alarma();
+
             }
         }
     }
