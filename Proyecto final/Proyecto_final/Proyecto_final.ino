@@ -24,7 +24,7 @@ const int Tgracia = 20;
 Servo servoMotor;
 
 // UID válido
-byte uidValido[4] = {0x33, 0x79, 0x9F, 0x36};
+byte uidValido[4] = {0xD3, 0x84, 0x40, 0x16};
 
 // --- NEXTION ---
 void nexSendCmd(const char* cmd) {
